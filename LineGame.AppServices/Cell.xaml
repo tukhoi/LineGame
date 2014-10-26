@@ -1,0 +1,236 @@
+﻿<UserControl x:Class="LineGame.AppServices.Cell"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    d:DesignHeight="40" d:DesignWidth="40">
+
+    <Grid x:Name="CellLayoutRoot" Tap="CellLayoutRoot_Tap" CacheMode="BitmapCache">
+        <Grid.Background>
+            <ImageBrush ImageSource="/Resources/background3.png"/>
+        </Grid.Background>
+        <Border BorderBrush="Gold" BorderThickness="0.5" Grid.Row="0" Grid.Column="0" Margin="0" x:Name="brdCell" >
+            <StackPanel Orientation="Vertical">
+                <Grid x:Name="grdBall">
+                    <TextBlock Margin="-5,-14" Text="" Foreground="Gold" x:Name="txtNumber" Canvas.ZIndex="1"/>
+                    <Path x:Name="pBall" Canvas.ZIndex="0">
+                        <Path.Data>
+                            <EllipseGeometry x:Name="ball" RadiusX="15" RadiusY="15" />
+                        </Path.Data>
+                        <Path.Fill>
+                            <RadialGradientBrush GradientOrigin="0.25 0.25" Center="0.5 0.5">
+                                <GradientStop x:Name="pBallColor" Offset="0" Color="Green" />
+                                <GradientStop x:Name="pBallColorOffset1" Offset="1" Color="#FF129A49" />
+                            </RadialGradientBrush>
+                        </Path.Fill>
+                        <!--<Path.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform x:Name="scale" CenterY="1" CenterX="1" />
+                                <TranslateTransform x:Name="translate" X="20" Y ="20" />
+                            </TransformGroup>
+                        </Path.RenderTransform>-->
+                    </Path>
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform x:Name="scale" CenterY="1" CenterX="1" />
+                            <TranslateTransform x:Name="translate" X="20" Y ="20" />
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Grid.Resources>
+                        <Storyboard x:Name="sbBallBouncing"
+                            RepeatBehavior="Forever">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate" Storyboard.TargetProperty="Y">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:1" Value="25" KeySpline="0.25 0, 0.6 0.2" />
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:1.1" Value="25" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:2.1" Value="0" KeySpline="0.75 1, 0.4 0.8" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:1.05" Value="1.5" KeySpline="0.75 1, 0.4 0.8" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:1.1" Value="1" KeySpline="0.25 0, 0.6 0.2"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:1.05" Value="0.66" KeySpline="0.75 1, 0.4 0.8"/>
+                                <SplineDoubleKeyFrame   KeyTime="0:0:1.1" Value="1" KeySpline="0.25 0, 0.6 0.2" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Name="sbStopRight">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate" Storyboard.TargetProperty="X">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="25" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.1" Value="0" KeySpline="0.25 0, 0.6 0.2" />
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.15" Value="0" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.2" Value="25" KeySpline="0.75 1, 0.4 0.8" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="1.5" KeySpline="0.75 1, 0.4 0.8" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.17" Value="1" KeySpline="0.25 0, 0.6 0.2"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="0.66" KeySpline="0.75 1, 0.4 0.8"/>
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.17" Value="1" KeySpline="0.25 0, 0.6 0.2" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Name="sbStopLeft">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate" Storyboard.TargetProperty="X">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="25" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.1" Value="50" KeySpline="0.25 0, 0.6 0.2" />
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.15" Value="50" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.2" Value="25" KeySpline="0.75 1, 0.4 0.8" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="1.5" KeySpline="0.75 1, 0.4 0.8" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.17" Value="1" KeySpline="0.25 0, 0.6 0.2"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="0.66" KeySpline="0.75 1, 0.4 0.8"/>
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.17" Value="1" KeySpline="0.25 0, 0.6 0.2" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Name="sbStopDown">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate" Storyboard.TargetProperty="Y">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="25" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.1" Value="0" KeySpline="0.25 0, 0.6 0.2" />
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.15" Value="0" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.2" Value="25" KeySpline="0.75 1, 0.4 0.8" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="1.5" KeySpline="0.75 1, 0.4 0.8" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.17" Value="1" KeySpline="0.25 0, 0.6 0.2"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="0.66" KeySpline="0.75 1, 0.4 0.8"/>
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.17" Value="1" KeySpline="0.25 0, 0.6 0.2" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Name="sbStopUp">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate" Storyboard.TargetProperty="Y">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="25" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.1" Value="0" KeySpline="0.25 0, 0.6 0.2" />
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.15" Value="0" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.2" Value="25" KeySpline="0.75 1, 0.4 0.8" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="1.5" KeySpline="0.75 1, 0.4 0.8" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.17" Value="1" KeySpline="0.25 0, 0.6 0.2"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="0.66" KeySpline="0.75 1, 0.4 0.8"/>
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.17" Value="1" KeySpline="0.25 0, 0.6 0.2" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Name="sbLeftRight">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate" Storyboard.TargetProperty="X">
+                                <EasingDoubleKeyFrame Value="30" KeyTime="00:00:0.1" x:Name="animationToRight">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+
+                                <!--<DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="11" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:1" Value="30" KeySpline="0.25 0, 0.6 0.2" />-->
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Name="sbRightLeft">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate" Storyboard.TargetProperty="X">
+                                <EasingDoubleKeyFrame Value="30" KeyTime="00:00:0.1" x:Name="animationToLeft">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Name="sbTopBottom">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate" Storyboard.TargetProperty="Y">
+                                <EasingDoubleKeyFrame Value="30" KeyTime="00:00:0.1" x:Name="animationToBottom">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Name="sbBottomTop">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate" Storyboard.TargetProperty="Y">
+                                <EasingDoubleKeyFrame Value="30" KeyTime="00:00:0.1" x:Name="animationToTop">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Name="sbDisappear">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="translate" Storyboard.TargetProperty="X">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.1" Value="50" KeySpline="0.25 0, 0.6 0.2" />
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.15" Value="50" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.2" Value="0" KeySpline="0.75 1, 0.4 0.8" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="1.5" KeySpline="0.75 1, 0.4 0.8" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.17" Value="1" KeySpline="0.25 0, 0.6 0.2"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="0.66" KeySpline="0.75 1, 0.4 0.8"/>
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.17" Value="1" KeySpline="0.25 0, 0.6 0.2" />
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="pBall" Storyboard.TargetProperty="Opacity">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.1"    Value="1" />
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.13" Value="0.66" KeySpline="0.75 1, 0.4 0.8"/>
+                                <SplineDoubleKeyFrame   KeyTime="0:0:0.2" Value="0" KeySpline="0.25 0, 0.6 0.2" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                        <Storyboard x:Name="sbGrowUp">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.02" Value="0.3" />
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.04" Value="0.5" KeySpline="0.75 1, 0.4 0.8" />
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.05" Value="1" KeySpline="0.25 0, 0.6 0.2"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.02" Value="0.3" />
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.04" Value="0.5" KeySpline="0.75 1, 0.4 0.8"/>
+                                <SplineDoubleKeyFrame KeyTime="0:0:0.05" Value="1" KeySpline="0.25 0, 0.6 0.2" />
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </Grid.Resources>
+                </Grid>
+                <TextBlock x:Name="txtId" Visibility="Collapsed"/>
+                <StackPanel Orientation="Horizontal" Margin="-10, -14">
+                    <TextBlock Text="" FontSize="20" Foreground="Gold" x:Name="txtScore" Canvas.ZIndex="2" Visibility="Collapsed"/>
+                    <Image Margin="4,0,0,0" Source="/Resources/hand-icon.png" x:Name="imgHighestScore" Canvas.ZIndex="2" Visibility="Collapsed"/>
+                    <StackPanel.RenderTransform>
+                        <TransformGroup>
+                            <TranslateTransform x:Name="scorePosition" X="20" Y="25" />
+                        </TransformGroup>
+                    </StackPanel.RenderTransform>
+                    <StackPanel.Resources>
+                        <Storyboard x:Name="sbShowScore">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="scorePosition" Storyboard.TargetProperty="Y">
+                                <DiscreteDoubleKeyFrame KeyTime="0:0:0.0" Value="25" />
+                                <EasingDoubleKeyFrame Value="-5" KeyTime="00:00:0.8">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <CubicEase EasingMode="EaseOut"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </StackPanel.Resources>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
