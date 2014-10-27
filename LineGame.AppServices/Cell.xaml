@@ -15,9 +15,9 @@
         </Grid.Background>
         <Border BorderBrush="Gold" BorderThickness="0.5" Grid.Row="0" Grid.Column="0" Margin="0" x:Name="brdCell" >
             <StackPanel Orientation="Vertical">
-                <Grid x:Name="grdBall">
-                    <TextBlock Margin="-5,-14" Text="" Foreground="Gold" x:Name="txtNumber" Canvas.ZIndex="1"/>
-                    <Path x:Name="pBall" Canvas.ZIndex="0">
+                <Grid x:Name="grdBall" Canvas.ZIndex="0">
+                    <TextBlock Margin="-5,-14" Text="" Foreground="Gold" x:Name="txtNumber" Canvas.ZIndex="2"/>
+                    <Path x:Name="pBall" Canvas.ZIndex="1">
                         <Path.Data>
                             <EllipseGeometry x:Name="ball" RadiusX="15" RadiusY="15" />
                         </Path.Data>
@@ -209,9 +209,9 @@
                     </Grid.Resources>
                 </Grid>
                 <TextBlock x:Name="txtId" Visibility="Collapsed"/>
-                <StackPanel Orientation="Horizontal" Margin="-10, -14">
-                    <TextBlock Text="" FontSize="20" Foreground="Gold" x:Name="txtScore" Canvas.ZIndex="2" Visibility="Collapsed"/>
-                    <Image Margin="4,0,0,0" Source="/Resources/hand-icon.png" x:Name="imgHighestScore" Canvas.ZIndex="2" Visibility="Collapsed"/>
+                <StackPanel Orientation="Horizontal" Margin="-10, -14" Canvas.ZIndex="3">
+                    <TextBlock Text="" FontSize="20" Foreground="Gold" x:Name="txtScore" Canvas.ZIndex="4" Visibility="Collapsed"/>
+                    <Image Margin="4,0,0,0" Source="/Resources/hand-icon.png" Canvas.ZIndex="4" x:Name="imgHighestScore" Visibility="Collapsed"/>
                     <StackPanel.RenderTransform>
                         <TransformGroup>
                             <TranslateTransform x:Name="scorePosition" X="20" Y="25" />

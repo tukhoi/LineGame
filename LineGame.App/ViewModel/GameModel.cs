@@ -18,6 +18,7 @@ namespace LineGame.App.ViewModel
         public string Move { get; set; }
         public string Duration { get; set; }
         public string EntryDate { get; set; }
+        public byte HighestScore { get; set; }
         public Brush ForegroundColor { get; set; }
         public Visibility UseNumber { get; set; }
         public byte Rank { get; set; }
@@ -32,6 +33,8 @@ namespace LineGame.App.ViewModel
             this.EntryDate = game.Mode != PlayingMode.Lost ?
                 AppResources.HistoryEntryDateTitle + ": " + game.EntryDate.ToString("dd/MM/yyyy hh:mm:ss tt")
                 : AppResources.HistoryEntryDateLostTitle + ": " + game.EntryDate.ToString("dd/MM/yyyy hh:mm:ss tt");
+
+            this.HighestScore = game.HighestScore;
 
             this.UseNumber = game.UseNumber ? Visibility.Visible : Visibility.Collapsed;
 

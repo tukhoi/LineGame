@@ -286,6 +286,15 @@ namespace LineGame.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to linegame - lost.
+        /// </summary>
+        public static string LostTitle {
+            get {
+                return ResourceManager.GetString("LostTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to move.
         /// </summary>
         public static string MoveCountTitle {
@@ -430,7 +439,7 @@ namespace LineGame.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to updated on 10/23/2014.
+        ///   Looks up a localized string similar to updated on 10/27/2014.
         /// </summary>
         public static string UpdateDateMessage {
             get {

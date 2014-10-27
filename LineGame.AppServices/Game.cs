@@ -15,6 +15,7 @@ namespace LineGame.AppServices
         public bool UseNumber { get; set; }
         public TimeSpan Duration { get; set; }
         public DateTime EntryDate { get; set; }
+        public byte HighestScore { get; set; }
         public PlayingMode Mode { get; set; }
         public IList<CellData> CellData { get; set; }
         public CellData[] NextCells { get; set; }

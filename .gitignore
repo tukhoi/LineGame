@@ -43,3 +43,5 @@ obj
 Obj
 *.suo
 *.csproj.user
+PerfLogs
+*.sap

@@ -162,7 +162,7 @@
     <value>sound enabled</value>
   </data>
   <data name="UpdateDateMessage" xml:space="preserve">
-    <value>updated on 10/23/2014</value>
+    <value>updated on 10/27/2014</value>
   </data>
   <data name="VersionMessage" xml:space="preserve">
     <value>version {0}</value>
@@ -250,5 +250,8 @@
   </data>
   <data name="StartGameMessage" xml:space="preserve">
     <value>starting...</value>
+  </data>
+  <data name="LostTitle" xml:space="preserve">
+    <value>linegame - lost</value>
   </data>
 </root>

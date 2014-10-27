@@ -141,6 +141,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="LineGame.App_2014_10_27_10_49_08.sap" />
     <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">

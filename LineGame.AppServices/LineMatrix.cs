@@ -17,7 +17,7 @@ using System.Windows.Media;
 
 namespace LineGame.AppServices
 {
-    public class LineMatrix : Grid
+    public class LineMatrix : Grid, IDisposable
     {
         CellData[] _nextCells = new CellData[3];
         Random _random = new Random();
@@ -73,6 +73,12 @@ namespace LineGame.AppServices
         {
             get { return _nextCells; }
             set { _nextCells = value; }
+        }
+
+        public byte HighestScore
+        {
+            get { return _highestScore; }
+            set { _highestScore = value; }
         }
 
         public LineMatrix(sbyte rowCount = AppConfig.ROW_COUNT, sbyte columnCount = AppConfig.COLUMN_COUNT, byte startBalls = 10, byte proposedCells = 3, byte winningBalls = AppConfig.WINNING_LINE, byte colorsLimit = 0, bool useNumber=false, CellData[] nextCells = null)
@@ -176,6 +182,20 @@ namespace LineGame.AppServices
                 cell.Data.State = State.Filled;
                 await cell.SetBounce(false);
             };
+        }
+
+        public void Dispose()
+        {
+            if (_cells != null && _cells.Count > 0)
+                _cells.ForEach(cell =>
+                    {
+                        cell.SelectedEvent -= cell_TapEvent;
+                        cell.Dispose();
+                    });
+
+            this._cells.Clear();
+            this._nextCells = null;
+            this._lastSelectedCell = null;
         }
 
         #endregion
@@ -485,7 +505,6 @@ namespace LineGame.AppServices
                     var cell = new Cell(position, transparentBackground:true, useNumber:_useNumber);
                     cell.Data.Id = AxisHelper.ConvertToLinear(position);
                     cell.Margin = new Thickness(0, 0, 0, 0);
-                    cell.Data.Id = AxisHelper.ConvertToLinear(position);
                     cell.SelectedEvent += cell_TapEvent;
                     _cells.Add(cell);
                     this.Children.Add(cell);

@@ -95,10 +95,10 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0">
-                    <TextBlock x:Name="txtTime" CacheMode="BitmapCache" Foreground="Gold" Text="00:00:00" Width="115" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextLargeStyle}"/>
-                    <TextBlock x:Name="txtScore" CacheMode="BitmapCache" Foreground="Gold" Text="Score: 1000" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextTitle2Style}" Margin="0,0,10,0"/>
-                    <TextBlock x:Name="txtBallCount" CacheMode="BitmapCache" Foreground="Gold" Text="Ball: 1000" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0,0,10,3"/>
-                    <TextBlock x:Name="txtMoveCount" CacheMode="BitmapCache" Foreground="Gold" Text="Move: 1000" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0,0,0,3"/>
+                    <TextBlock x:Name="txtTime" Foreground="Gold" Text="00:00:00" VerticalAlignment="Bottom" Width="80" Style="{StaticResource PhoneTextSubtleStyle}" Margin="16,0,4,3"/>
+                    <TextBlock x:Name="txtScore" CacheMode="BitmapCache" Foreground="Gold" Text="Score: 0" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextTitle2Style}" Margin="0,0,4,0"/>
+                    <TextBlock x:Name="txtBallCount" CacheMode="BitmapCache" Foreground="Gold" Text="Ball: 0" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0,0,4,3"/>
+                    <TextBlock x:Name="txtMoveCount" CacheMode="BitmapCache" Foreground="Gold" Text="Move: 0" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0,0,0,3"/>
                 </StackPanel>                
                 
                 <Image x:Name="btnStartImage" Width="48" Height="48" Grid.Column="0" Grid.Row="1" Tap="btnStart_Tap"/>

@@ -14,7 +14,7 @@ using Davang.WP.Utilities.Extensions;
 
 namespace LineGame.AppServices
 {
-    public partial class Cell : UserControl
+    public partial class Cell : UserControl, IDisposable
     {
         public delegate Task TapDelegate(sbyte cellId);
         public event TapDelegate SelectedEvent;
@@ -26,15 +26,26 @@ namespace LineGame.AppServices
             set
             {
                 _cellData = value;
-                Data.StateChange += SetState;
-                Data.BallColorChange += SetBallColor;
-                Data.IdChange += Data_IdChange;
-                Data.NumberChange += Data_NumberChange;
+                //Data.StateChange += SetState;
+                //Data.BallColorChange += SetBallColor;
+                //Data.IdChange += Data_IdChange;
+                //Data.NumberChange += Data_NumberChange;
 
                 SetState(_cellData.State);
                 SetBallColor(_cellData.BallColor);
                 Data_NumberChange(_cellData.Number);
             }
+        }
+
+        public void Dispose()
+        {
+            this.Data.StateChange -= SetState;
+            this.Data.BallColorChange -= SetBallColor;
+            this.Data.IdChange -= Data_IdChange;
+            this.Data.NumberChange -= Data_NumberChange;
+
+            _cellData = null;
+            this.CellLayoutRoot.Children.Clear();
         }
 
         public Cell PreviousCellInPath { get; set; }
@@ -47,18 +58,8 @@ namespace LineGame.AppServices
         public Cell(Position position, bool transparentBackground = false, bool border = true, bool useNumber=false)
         {
             InitializeComponent();
-            
+
             Data = new CellData();
-            Data.StateChange += SetState;
-            Data.BallColorChange += SetBallColor;
-            Data.IdChange += Data_IdChange;
-            if (useNumber)
-            {
-                Data.NumberChange += Data_NumberChange;
-                txtNumber.Visibility = System.Windows.Visibility.Visible;
-            }
-            else
-                txtNumber.Visibility = System.Windows.Visibility.Collapsed;
 
             this.Data.Position = position;
             Data.State = AppServices.State.Empty;
@@ -80,12 +81,23 @@ namespace LineGame.AppServices
                 CellLayoutRoot.Background = new SolidColorBrush(Colors.Transparent);
 
             if (!border) brdCell.BorderThickness = new Thickness(0, 0, 0, 0);
+
+            Data.StateChange += SetState;
+            Data.BallColorChange += SetBallColor;
+            Data.IdChange += Data_IdChange;
+            if (useNumber)
+            {
+                Data.NumberChange += Data_NumberChange;
+                txtNumber.Visibility = System.Windows.Visibility.Visible;
+            }
+            else
+                txtNumber.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         public override bool Equals(object obj)
-        {
+        {   
             var comparedCell = obj as Cell;
-            if (comparedCell == null) return false;
+            if (comparedCell == null || comparedCell.Data == null) return false;
 
             return this.Data.Position.Equals(comparedCell.Data.Position);
         }
@@ -168,12 +180,14 @@ namespace LineGame.AppServices
 
         public async Task ShowScore(byte score, bool highestScore = false)
         {
+            Canvas.SetZIndex(this, 100);
             imgHighestScore.Visibility = highestScore ? Visibility.Visible : Visibility.Collapsed;
             txtScore.Visibility = Visibility.Visible;
             txtScore.Text = "+" + score.ToString();
             await sbShowScore.BeginAsync();
             txtScore.Visibility = Visibility.Collapsed;
             imgHighestScore.Visibility = Visibility.Collapsed;
+            Canvas.SetZIndex(this, 0);
         }
 
         private void SetBallColor(BallColor ballColor)
@@ -194,9 +208,6 @@ namespace LineGame.AppServices
                     pBallColorOffset1.Color = Davang.Utilities.Helpers.Colors.PaleVioletRed;
                     break;
                 case AppServices.BallColor.OliveDrab:
-                    //pBallColor.Color = Davang.Utilities.Helpers.Colors.Gray;
-                    //pBallColorOffset1.Color = Davang.Utilities.Helpers.Colors.CadetBlue;
-
                     pBallColor.Color = Davang.Utilities.Helpers.Colors.DarkGray;
                     pBallColorOffset1.Color = Davang.Utilities.Helpers.Colors.DimGray;
 

@@ -58,48 +58,64 @@ namespace LineGame.App
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            this.SetProgressIndicator(true, AppResources.LoadGameMessage);
             if (App.ShouldRefreshGame)
             {
-                this.SetProgressIndicator(true, AppResources.LoadGameMessage);
                 await Task.Run(() => LoadGames());
-                this.SetProgressIndicator(false);
+                //await Task.Factory.StartNew(() =>
+                //    Deployment.Current.Dispatcher.BeginInvoke(new Action(() => Initialize(_currentGame))));
+
+                Initialize(_currentGame);
             }
 
-            Initialize(_currentGame);
+            this.SetProgressIndicator(false);
+            
         }
 
         private void Initialize(Game game = null)
         {
-            _matrix = new LineMatrix(useNumber:game == null ? AppConfig.UseNumber : game.UseNumber,
-                nextCells:game == null ? null : game.NextCells);
-            _matrix.ScoreEvent += _matrix_ScoreEvent;
-            _matrix.MoveEvent += _matrix_MoveEvent;
-            _matrix.NextCellsEvent += _matrix_NextCellsEvent;
-            _matrix.NotifyEvent += matrix_Notify;
-            _matrix.SetBackground(AppConfig.Background.FileName);
-            
-            if (game != null) PopulateMatrixFromGame(_matrix, game);
-            cvMatrix.Children.Clear();
-            //_matrix.Width += 8;
-            //_matrix.Height += 8;
-            _matrix.Margin = new Thickness(0, 20, 0, 0);
-            cvMatrix.Children.Add(_matrix);
+            try
+            {
 
-            _playingTime = game == null ? new TimeSpan(0, 0, 0) : game.Duration;
+                if (_matrix != null && _matrix.Mode != PlayingMode.Initialized)
+                {
+                    _matrix.Dispose();
+                    _matrix = null;
+                }
 
-            InitialzeProposalCells(_matrix.NextCells);
+                _matrix = new LineMatrix(useNumber: game == null ? AppConfig.UseNumber : game.UseNumber,
+                    nextCells: game == null ? null : game.NextCells);
+                _matrix.ScoreEvent += _matrix_ScoreEvent;
+                _matrix.MoveEvent += _matrix_MoveEvent;
+                _matrix.NextCellsEvent += _matrix_NextCellsEvent;
+                _matrix.NotifyEvent += matrix_Notify;
+                _matrix.SetBackground(AppConfig.Background.FileName);
 
-            _playTimer = new DispatcherTimer();
-            _playTimer.Interval = new TimeSpan(0, 0, 1);
-            _playTimer.Tick += _playTimer_Tick;
-            _playTimer.Stop();
-            btnStartImage.Source = AppConfig.PLAY_IMAGE;
-            btnStopImage.Source = AppConfig.STOP_IMAGE;
+                if (game != null) PopulateMatrixFromGame(_matrix, game);
+                cvMatrix.Children.Clear();
+                _matrix.Margin = new Thickness(0, 20, 0, 0);
+                cvMatrix.Children.Add(_matrix);
 
-            txtScore.Text = AppResources.ScoreTitle + ": " + _matrix.Score.ToString();
-            txtBallCount.Text = AppResources.BallTitle + ": " + _matrix.BallCount.ToString();
-            txtMoveCount.Text = AppResources.MoveCountTitle + ": " + _matrix.MoveCount.ToString();
-            txtTime.Text = _playingTime.ToString();
+                _playingTime = game == null ? new TimeSpan(0, 0, 0) : game.Duration;
+
+                InitialzeProposalCells(_matrix.NextCells);
+
+                _playTimer = new DispatcherTimer();
+                _playTimer.Interval = new TimeSpan(0, 0, 1);
+                _playTimer.Tick += _playTimer_Tick;
+                _playTimer.Stop();
+                btnStartImage.Source = AppConfig.PLAY_IMAGE;
+                btnStopImage.Source = AppConfig.STOP_IMAGE;
+
+                txtScore.Text = AppResources.ScoreTitle + ": " + _matrix.Score.ToString();
+                txtBallCount.Text = AppResources.BallTitle + ": " + _matrix.BallCount.ToString();
+                txtMoveCount.Text = AppResources.MoveCountTitle + ": " + _matrix.MoveCount.ToString();
+                txtTime.Text = _playingTime.ToString();
+            }
+            catch (Exception ex)
+            {
+                int i = 1;
+            }
         }
 
         private void PopulateMatrixFromGame(LineMatrix matrix, Game game)
@@ -113,6 +129,8 @@ namespace LineGame.App
             matrix.Score = game == null ? 0 : game.Score;
             matrix.BallCount = game == null ? 0 : game.Ball;
             matrix.MoveCount = game == null ? 0 : game.Move;
+            matrix.HighestScore = game.HighestScore;
+            SetTitle(matrix.Mode);
         }
 
         private void InitialzeProposalCells(CellData[] nextCells)
@@ -135,16 +153,17 @@ namespace LineGame.App
 
         private async void btnStart_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            if (_matrix.Mode == PlayingMode.Stopped || _matrix.Mode == PlayingMode.Initialized)
+            if (_matrix.Mode == PlayingMode.Stopped || _matrix.Mode == PlayingMode.Lost || _matrix.Mode == PlayingMode.Initialized)
             {
-                Initialize();
+                if (_matrix != null && _matrix.Mode != PlayingMode.Initialized)
+                    Initialize();
                 _matrix.Start();
                 _playingTime = new TimeSpan(0, 0, 0);
                 _playTimer.Start();
                 _currentGame = new Game();
                 _currentGame.Id = Guid.NewGuid();
                 btnStartImage.Source = AppConfig.PAUSE_IMAGE;
-                txtTitle.Text = AppResources.PlayingTitle;
+                //txtTitle.Text = AppResources.PlayingTitle;
 
                 GAExtensions.LogNewGame();
             }
@@ -154,7 +173,7 @@ namespace LineGame.App
                 await _matrix.Pause();
                 _playTimer.Stop();
                 btnStartImage.Source = AppConfig.PLAY_IMAGE;
-                txtTitle.Text = AppResources.PausedTitle;
+                //txtTitle.Text = AppResources.PausedTitle;
                 this.SetProgressIndicator(false);
             }
             else if (_matrix.Mode == PlayingMode.Paused)
@@ -162,7 +181,31 @@ namespace LineGame.App
                 _matrix.Resume();
                 _playTimer.Start();
                 btnStartImage.Source = AppConfig.PAUSE_IMAGE;
-                txtTitle.Text = AppResources.PlayingTitle;
+                //txtTitle.Text = AppResources.PlayingTitle;
+            }
+
+            SetTitle(_matrix.Mode);
+        }
+
+        private void SetTitle(PlayingMode mode)
+        {
+            switch (mode)
+            { 
+                case PlayingMode.Initialized:
+                    txtTitle.Text = AppResources.ApplicationTitle;
+                    break;
+                case PlayingMode.Lost:
+                    txtTitle.Text = AppResources.LostTitle;
+                    break;
+                case PlayingMode.Paused:
+                    txtTitle.Text = AppResources.PausedTitle;
+                    break;
+                case PlayingMode.Playing:
+                    txtTitle.Text = AppResources.PlayingTitle;
+                    break;
+                case PlayingMode.Stopped:
+                    txtTitle.Text = AppResources.StoppedTitle;
+                    break;
             }
         }
 
@@ -172,13 +215,15 @@ namespace LineGame.App
             {
                 this.SetProgressIndicator(true, AppResources.StartGameMessage);
                 await StopGame();
-                txtTitle.Text = AppResources.StoppedTitle;
+                //txtTitle.Text = AppResources.StoppedTitle;
                 this.SetProgressIndicator(false);
             }
             else
             {
                 Messenger.ShowToast(AppResources.GameStoppedMessage);
             }
+
+            SetTitle(_matrix.Mode);
 
             if (_currentGame != null)
             GAExtensions.LogEndGame(_currentGame.Score, _currentGame.Duration);
@@ -226,6 +271,7 @@ namespace LineGame.App
                     message = AppResources.GameStoppedMessage;
                     break;
                 case PlayingMode.Lost:
+                    await StopGame();
                     message = AppResources.GameLostMessage;
                     break;
             }
@@ -237,6 +283,13 @@ namespace LineGame.App
         {
             await _matrix.Stop();
             _playTimer.Stop();
+
+            _matrix.ScoreEvent -= _matrix_ScoreEvent;
+            _matrix.MoveEvent -= _matrix_MoveEvent;
+            _matrix.NextCellsEvent -= _matrix_NextCellsEvent;
+            _matrix.NotifyEvent -= matrix_Notify;
+            //_matrix.Dispose();
+
             SaveGame();
             btnStartImage.Source = AppConfig.PLAY_IMAGE;
             var message = string.Format(AppResources.LoseMessage, _matrix.Score);
@@ -281,6 +334,7 @@ namespace LineGame.App
             _currentGame.Move = _matrix.MoveCount;
             _currentGame.Duration = _playingTime;
             _currentGame.EntryDate = DateTime.Now;
+            _currentGame.HighestScore = _matrix.HighestScore;
             _currentGame.Mode = _matrix.Mode;
             _currentGame.UseNumber = _matrix.UseNumber;
             _currentGame.CellData = _matrix.ExportData();

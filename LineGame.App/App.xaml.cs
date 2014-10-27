@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Davang.Utilities.Log;
+using Davang.Utilities;
 
 namespace LineGame.App
 {
@@ -65,7 +66,9 @@ namespace LineGame.App
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-
+#if DEBUG
+            MemoryDiagnostic.BeginRecording();
+#endif
         }
 
         // Code to execute when the application is launching (eg, from Start)
