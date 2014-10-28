@@ -23,30 +23,38 @@ namespace LineGame.AppServices
 
         }
 
-        public override bool Equals(object obj)
+        public bool IsEqual(Position comparedPosition)
         {
-            if (obj == null) return false;
-            var comparedPosition = obj as Position;
+            if (comparedPosition == null) return false;
 
             return this.X == comparedPosition.X
                 && this.Y == comparedPosition.Y;
         }
 
-        public override int GetHashCode()
-        {
-            return X.GetHashCode() + Y.GetHashCode();
-        }
+        //public override bool Equals(object obj)
+        //{
+        //    if (obj == null) return false;
+        //    var comparedPosition = obj as Position;
+
+        //    return this.X == comparedPosition.X
+        //        && this.Y == comparedPosition.Y;
+        //}
+
+        //public override int GetHashCode()
+        //{
+        //    return X.GetHashCode() + Y.GetHashCode();
+        //}
 
         public NeighbourPostion IsNeighbourPosition(Position position)
         {
-            if (position.Equals(GetNeighbourPosition(NeighbourPostion.Left))) return NeighbourPostion.Left;
-            if (position.Equals(GetNeighbourPosition(NeighbourPostion.Up))) return NeighbourPostion.Up;
-            if (position.Equals(GetNeighbourPosition(NeighbourPostion.Right))) return NeighbourPostion.Right;
-            if (position.Equals(GetNeighbourPosition(NeighbourPostion.Down))) return NeighbourPostion.Down;
-            if (position.Equals(GetNeighbourPosition(NeighbourPostion.UpperLeft))) return NeighbourPostion.UpperLeft;
-            if (position.Equals(GetNeighbourPosition(NeighbourPostion.UpperRight))) return NeighbourPostion.UpperRight;
-            if (position.Equals(GetNeighbourPosition(NeighbourPostion.BottomLeft))) return NeighbourPostion.BottomLeft;
-            if (position.Equals(GetNeighbourPosition(NeighbourPostion.BottomRight))) return NeighbourPostion.BottomRight;
+            if (position.IsEqual(GetNeighbourPosition(NeighbourPostion.Left))) return NeighbourPostion.Left;
+            if (position.IsEqual(GetNeighbourPosition(NeighbourPostion.Up))) return NeighbourPostion.Up;
+            if (position.IsEqual(GetNeighbourPosition(NeighbourPostion.Right))) return NeighbourPostion.Right;
+            if (position.IsEqual(GetNeighbourPosition(NeighbourPostion.Down))) return NeighbourPostion.Down;
+            if (position.IsEqual(GetNeighbourPosition(NeighbourPostion.UpperLeft))) return NeighbourPostion.UpperLeft;
+            if (position.IsEqual(GetNeighbourPosition(NeighbourPostion.UpperRight))) return NeighbourPostion.UpperRight;
+            if (position.IsEqual(GetNeighbourPosition(NeighbourPostion.BottomLeft))) return NeighbourPostion.BottomLeft;
+            if (position.IsEqual(GetNeighbourPosition(NeighbourPostion.BottomRight))) return NeighbourPostion.BottomRight;
             
             return NeighbourPostion.None;
         }

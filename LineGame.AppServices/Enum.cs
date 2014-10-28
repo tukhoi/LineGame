@@ -62,7 +62,8 @@ namespace LineGame.AppServices
         SoundEnabled,
         LastUsedAdsProvider,
         Background,
-        UseNumber
+        UseNumber,
+        AdsLoaded
     }
 
     public enum AdsProvider

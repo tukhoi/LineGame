@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using LineGame.AppServices.Sound;
 using Davang.WP.Utilities;
 using Davang.Utilities.Log;
+using Davang.WP.Utilities.Extensions;
 
 namespace LineGame.App
 {
@@ -30,17 +31,13 @@ namespace LineGame.App
         Cell[] _proposalCells;
 
         Game _currentGame;
+        int _maxScore;
 
         public MainPage()
         {
             InitializeComponent();
             BuildLocalizedApplicationBar();
-            adduplex.Visibility = App.AdsProvider == AdsProvider.AdDuplex ? Visibility.Visible : Visibility.Collapsed;
-            if (App.AdsProvider == AdsProvider.Smaato)
-            {
-                smaato.Visibility = System.Windows.Visibility.Visible;
-                smaato.StartAds();
-            }
+            PopulateAds();            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -62,60 +59,51 @@ namespace LineGame.App
             if (App.ShouldRefreshGame)
             {
                 await Task.Run(() => LoadGames());
-                //await Task.Factory.StartNew(() =>
-                //    Deployment.Current.Dispatcher.BeginInvoke(new Action(() => Initialize(_currentGame))));
+                await Task.Factory.StartNew(() =>
+                    Deployment.Current.Dispatcher.BeginInvoke(new Action(() => Initialize(_currentGame))));
 
-                Initialize(_currentGame);
+                //Initialize(_currentGame);
             }
 
             this.SetProgressIndicator(false);
-            
         }
 
         private void Initialize(Game game = null)
         {
-            try
+            if (_matrix != null && _matrix.Mode != PlayingMode.Initialized)
             {
-
-                if (_matrix != null && _matrix.Mode != PlayingMode.Initialized)
-                {
-                    _matrix.Dispose();
-                    _matrix = null;
-                }
-
-                _matrix = new LineMatrix(useNumber: game == null ? AppConfig.UseNumber : game.UseNumber,
-                    nextCells: game == null ? null : game.NextCells);
-                _matrix.ScoreEvent += _matrix_ScoreEvent;
-                _matrix.MoveEvent += _matrix_MoveEvent;
-                _matrix.NextCellsEvent += _matrix_NextCellsEvent;
-                _matrix.NotifyEvent += matrix_Notify;
-                _matrix.SetBackground(AppConfig.Background.FileName);
-
-                if (game != null) PopulateMatrixFromGame(_matrix, game);
-                cvMatrix.Children.Clear();
-                _matrix.Margin = new Thickness(0, 20, 0, 0);
-                cvMatrix.Children.Add(_matrix);
-
-                _playingTime = game == null ? new TimeSpan(0, 0, 0) : game.Duration;
-
-                InitialzeProposalCells(_matrix.NextCells);
-
-                _playTimer = new DispatcherTimer();
-                _playTimer.Interval = new TimeSpan(0, 0, 1);
-                _playTimer.Tick += _playTimer_Tick;
-                _playTimer.Stop();
-                btnStartImage.Source = AppConfig.PLAY_IMAGE;
-                btnStopImage.Source = AppConfig.STOP_IMAGE;
-
-                txtScore.Text = AppResources.ScoreTitle + ": " + _matrix.Score.ToString();
-                txtBallCount.Text = AppResources.BallTitle + ": " + _matrix.BallCount.ToString();
-                txtMoveCount.Text = AppResources.MoveCountTitle + ": " + _matrix.MoveCount.ToString();
-                txtTime.Text = _playingTime.ToString();
+                _matrix.Dispose();
+                _matrix = null;
             }
-            catch (Exception ex)
-            {
-                int i = 1;
-            }
+
+            _matrix = new LineMatrix(useNumber: game == null ? AppConfig.UseNumber : game.UseNumber,
+                nextCells: game == null ? null : game.NextCells);
+            _matrix.ScoreEvent += _matrix_ScoreEvent;
+            _matrix.MoveEvent += _matrix_MoveEvent;
+            _matrix.NextCellsEvent += _matrix_NextCellsEvent;
+            _matrix.NotifyEvent += matrix_Notify;
+            _matrix.SetBackground(AppConfig.Background.FileName);
+
+            if (game != null) PopulateMatrixFromGame(_matrix, game);
+            cvMatrix.Children.Clear();
+            _matrix.Margin = new Thickness(0, 20, 0, 0);
+            cvMatrix.Children.Add(_matrix);
+
+            _playingTime = game == null ? new TimeSpan(0, 0, 0) : game.Duration;
+
+            InitialzeProposalCells(_matrix.NextCells);
+
+            _playTimer = new DispatcherTimer();
+            _playTimer.Interval = new TimeSpan(0, 0, 1);
+            _playTimer.Tick += _playTimer_Tick;
+            _playTimer.Stop();
+            btnStartImage.Source = AppConfig.PLAY_IMAGE;
+            btnStopImage.Source = AppConfig.STOP_IMAGE;
+
+            txtScore.Text = AppResources.ScoreTitle + ": " + _matrix.Score.ToString();
+            txtBallCount.Text = AppResources.BallTitle + ": " + _matrix.BallCount.ToString();
+            txtMoveCount.Text = AppResources.MoveCountTitle + ": " + _matrix.MoveCount.ToString();
+            txtTime.Text = _playingTime.ToString();
         }
 
         private void PopulateMatrixFromGame(LineMatrix matrix, Game game)
@@ -239,6 +227,11 @@ namespace LineGame.App
         {
             txtBallCount.Text = AppResources.BallTitle + ": " + ballCount.ToString();
             txtScore.Text = AppResources.ScoreTitle + ": " + score.ToString();
+            if (_maxScore != 0 && score > _maxScore)
+            {
+                sbScoreRotate.BeginAsync();
+                _maxScore = score;
+            }
         }
 
         void _matrix_MoveEvent(int moveCount)
@@ -321,8 +314,12 @@ namespace LineGame.App
             var games = AppConfig.Games;
 
             if (games == null)
+            {
                 games = new List<Game>();
+                _maxScore = 0;
+            }
             _currentGame = games.FirstOrDefault(g => g != null && g.Mode == PlayingMode.Paused);
+            _maxScore = games.Max(g => g.Score);
         }
 
         private void WrapPlayingGame()
@@ -371,6 +368,28 @@ namespace LineGame.App
         void appBarButton_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/SettingPage.xaml", UriKind.Relative));
+        }
+
+        void PopulateAds()
+        {
+            if (App.AdsProvider == AdsProvider.Smaato)
+            {
+                smaato.Visibility = System.Windows.Visibility.Visible;
+                adduplex.Visibility = System.Windows.Visibility.Collapsed;
+                smaato.StartAds();
+            }
+            if (App.AdsProvider == AdsProvider.AdDuplex)
+            {
+                adduplex.Visibility = System.Windows.Visibility.Visible;
+                smaato.Visibility = System.Windows.Visibility.Collapsed;
+            }
+
+            var adsDictionary = AppConfig.AdsLoaded;
+            adsDictionary.AppendValue(App.AdsProvider, 1);
+            if (adsDictionary.ContainsKey(App.AdsProvider))
+                GAExtensions.LogAdsLoad(App.AdsProvider, adsDictionary[App.AdsProvider]);
+
+            AppConfig.AdsLoaded = adsDictionary;
         }
     }
 }

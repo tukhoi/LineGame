@@ -271,8 +271,6 @@ namespace LineGame.AppServices
                 {
                     //_player.MovingEffect();
                     await MoveBall(path);
-                    _moveCount++;
-                    
                     return true;
                 }
             }
@@ -463,7 +461,7 @@ namespace LineGame.AppServices
 
         private Cell GetCell(Position position)
         {
-            return _cells.Where(c => c.Data.Position.Equals(position)).FirstOrDefault();
+            return _cells.Where(c => c.Data.Position.IsEqual(position)).FirstOrDefault();
         }
 
         private Cell GetAvailableCell(sbyte columnIndex, sbyte rowIndex)
@@ -644,7 +642,7 @@ namespace LineGame.AppServices
 
         private void CollectPath(Cell cell, Cell startCell, IList<Cell> path)
         {
-            if (cell.PreviousCellInPath.Equals(startCell))
+            if (cell.PreviousCellInPath.IsEqual(startCell))
             {
                 path.Add(startCell);
                 return;
@@ -710,7 +708,7 @@ namespace LineGame.AppServices
                 var nextPosition = currentPosition.GetNeighbourPosition(neighbourPosition);
                 if (nextPosition == null) break;
 
-                var nextCell = _cells.Where(c => c.Data.Position.Equals(nextPosition)).FirstOrDefault();
+                var nextCell = _cells.Where(c => c.Data.Position.IsEqual(nextPosition)).FirstOrDefault();
                 if (nextCell != null
                     && nextCell.Data.BallColor == startCell.Data.BallColor
                     && (nextCell.Data.State == State.Filled || nextCell.Data.State == State.Selected))

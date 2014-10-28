@@ -96,8 +96,22 @@
 
                 <StackPanel Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0">
                     <TextBlock x:Name="txtTime" Foreground="Gold" Text="00:00:00" VerticalAlignment="Bottom" Width="80" Style="{StaticResource PhoneTextSubtleStyle}" Margin="16,0,4,3"/>
-                    <TextBlock x:Name="txtScore" CacheMode="BitmapCache" Foreground="Gold" Text="Score: 0" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextTitle2Style}" Margin="0,0,4,0"/>
-                    <TextBlock x:Name="txtBallCount" CacheMode="BitmapCache" Foreground="Gold" Text="Ball: 0" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0,0,4,3"/>
+                    <TextBlock x:Name="txtScore" CacheMode="BitmapCache" Foreground="Gold" Text="Score: 0" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextTitle2Style}" Margin="0,0,8,0">
+                        <TextBlock.RenderTransform>
+                            <RotateTransform x:Name="MyRotateTransform" Angle="0" CenterX="54" CenterY="21"/>
+                        </TextBlock.RenderTransform>
+
+                        <TextBlock.Resources>
+                            <Storyboard x:Name="sbScoreRotate">
+                                <DoubleAnimation
+                                    Storyboard.TargetName="MyRotateTransform" 
+                                    Storyboard.TargetProperty="(RotateTransform.Angle)"
+                                    From="0.0" To="360" Duration="0:0:1"/>
+                            </Storyboard>
+                        </TextBlock.Resources>
+
+                    </TextBlock>
+                    <TextBlock x:Name="txtBallCount" CacheMode="BitmapCache" Foreground="Gold" Text="Ball: 0" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0,0,8,3"/>
                     <TextBlock x:Name="txtMoveCount" CacheMode="BitmapCache" Foreground="Gold" Text="Move: 0" Width="Auto" VerticalAlignment="Bottom" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0,0,0,3"/>
                 </StackPanel>                
                 

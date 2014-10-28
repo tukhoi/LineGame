@@ -26,10 +26,10 @@ namespace LineGame.AppServices
             set
             {
                 _cellData = value;
-                //Data.StateChange += SetState;
-                //Data.BallColorChange += SetBallColor;
-                //Data.IdChange += Data_IdChange;
-                //Data.NumberChange += Data_NumberChange;
+                Data.StateChange += SetState;
+                Data.BallColorChange += SetBallColor;
+                Data.IdChange += Data_IdChange;
+                Data.NumberChange += Data_NumberChange;
 
                 SetState(_cellData.State);
                 SetBallColor(_cellData.BallColor);
@@ -94,18 +94,30 @@ namespace LineGame.AppServices
                 txtNumber.Visibility = System.Windows.Visibility.Collapsed;
         }
 
-        public override bool Equals(object obj)
-        {   
-            var comparedCell = obj as Cell;
-            if (comparedCell == null || comparedCell.Data == null) return false;
+        //public override bool Equals(object obj)
+        //{   
+        //    var comparedCell = obj as Cell;
+        //    //if (comparedCell == null || comparedCell.Data == null) return false;
 
+        //    if (comparedCell == null || comparedCell.Data == null)
+        //    {
+        //        int i = 1;
+        //    }
+
+        //    return this.Data.Position.Equals(comparedCell.Data.Position);
+        //}
+
+        public bool IsEqual(Cell comparedCell)
+        {
+            if (comparedCell == null || comparedCell.Data == null) return false;
+            
             return this.Data.Position.Equals(comparedCell.Data.Position);
         }
 
-        public override int GetHashCode()
-        {
-            return this.Data.Position.GetHashCode();
-        }
+        //public override int GetHashCode()
+        //{
+        //    return this.Data.Position.GetHashCode();
+        //}
 
         private void Data_IdChange(sbyte id)
         {

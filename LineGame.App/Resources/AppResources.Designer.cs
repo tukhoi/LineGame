@@ -439,7 +439,7 @@ namespace LineGame.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to updated on 10/27/2014.
+        ///   Looks up a localized string similar to updated on 10/28/2014.
         /// </summary>
         public static string UpdateDateMessage {
             get {

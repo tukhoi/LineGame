@@ -135,6 +135,18 @@ namespace LineGame.AppServices
             }
         }
 
+        public static IDictionary<AdsProvider, long> AdsLoaded
+        {
+            get
+            {
+                return GetConfig<IDictionary<AdsProvider, long>>(ConfigKey.AdsLoaded, new Dictionary<AdsProvider, long>());
+            }
+            set
+            {
+                SetConfig<IDictionary<AdsProvider, long>>(ConfigKey.AdsLoaded, value);
+            }
+        }
+
         #endregion
                 
         #region Private

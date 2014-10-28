@@ -1,4 +1,5 @@
 ﻿using Davang.Utilities.Log;
+using LineGame.AppServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace LineGame.App.Helpers
         {
             var tracker = GA.GetTracker();
             if (tracker != null)
-                tracker.SendEvent("Games", "NewGame", DateTime.Now.ToLongDateString(), 0);
+                tracker.SendEvent("Games", "NewGame", DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt"), 0);
         }
 
         public static void LogEndGame(int score, TimeSpan duration)
@@ -21,6 +22,13 @@ namespace LineGame.App.Helpers
             var tracker = GA.GetTracker();
             if (tracker != null)
                 tracker.SendEvent("Games", "EndGame", duration.ToString(), score);
+        }
+
+        public static void LogAdsLoad(AdsProvider provider, long totalLoaded)
+        {
+            var tracker = GA.GetTracker();
+            if (tracker != null)
+                tracker.SendEvent("AdsLoad", provider.ToString(), DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt"), totalLoaded);
         }
     }
 }
