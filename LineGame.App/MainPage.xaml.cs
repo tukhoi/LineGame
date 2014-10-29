@@ -313,13 +313,17 @@ namespace LineGame.App
         {
             var games = AppConfig.Games;
 
-            if (games == null)
+            if (games == null || games.Count == 0)
             {
                 games = new List<Game>();
+                _currentGame = null;
                 _maxScore = 0;
             }
-            _currentGame = games.FirstOrDefault(g => g != null && g.Mode == PlayingMode.Paused);
-            _maxScore = games.Max(g => g.Score);
+            else
+            {
+                _currentGame = games.FirstOrDefault(g => g != null && g.Mode == PlayingMode.Paused);
+                _maxScore = games.Max(g => g.Score);
+            }
         }
 
         private void WrapPlayingGame()

@@ -4,7 +4,7 @@
   <Languages xmlns="">
     <Language code="vi" />
   </Languages>
-  <App xmlns="" ProductID="{b4855412-9586-4a78-94e7-5f1aff022acf}" Title="LineGame" RuntimeType="Silverlight" Version="1.2.0.0" Genre="apps.normal" Author="LineGame.App author" Description="Line game" Publisher="LineGame.App" PublisherID="{6265e17c-4138-42e4-9945-3f226b7ce7d4}">
+  <App xmlns="" ProductID="{b4855412-9586-4a78-94e7-5f1aff022acf}" Title="LineGame" RuntimeType="Silverlight" Version="1.2.1.0" Genre="apps.normal" Author="LineGame.App author" Description="Line game" Publisher="LineGame.App" PublisherID="{6265e17c-4138-42e4-9945-3f226b7ce7d4}">
     <IconPath IsRelative="true" IsResource="false">Resources\small-tile-159.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
