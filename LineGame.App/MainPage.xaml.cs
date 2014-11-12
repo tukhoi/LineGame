@@ -59,10 +59,10 @@ namespace LineGame.App
             if (App.ShouldRefreshGame)
             {
                 await Task.Run(() => LoadGames());
-                await Task.Factory.StartNew(() =>
-                    Deployment.Current.Dispatcher.BeginInvoke(new Action(() => Initialize(_currentGame))));
+                //await Task.Factory.StartNew(() =>
+                //    Deployment.Current.Dispatcher.BeginInvoke(new Action(() => Initialize(_currentGame))));
 
-                //Initialize(_currentGame);
+                Initialize(_currentGame);
             }
 
             this.SetProgressIndicator(false);

@@ -162,7 +162,7 @@
     <value>sound enabled</value>
   </data>
   <data name="UpdateDateMessage" xml:space="preserve">
-    <value>updated on 10/28/2014</value>
+    <value>updated on 11/12/2014</value>
   </data>
   <data name="VersionMessage" xml:space="preserve">
     <value>version {0}</value>
@@ -201,7 +201,7 @@
     <value>background</value>
   </data>
   <data name="PickBackgroundTitle" xml:space="preserve">
-    <value>Pick background</value>
+    <value>pick background</value>
   </data>
   <data name="HistoryUseNumberTitle" xml:space="preserve">
     <value>use number</value>

@@ -77,6 +77,7 @@ namespace LineGame.App
         {
             ShouldRefreshGame = true;
             AdsProvider = AppConfig.LastUsedAdsProvider == AdsProvider.AdDuplex ? AdsProvider.Smaato : AdsProvider.AdDuplex;
+            //AdsProvider = AppServices.AdsProvider.AdDuplex;
             AppConfig.LastUsedAdsProvider = AdsProvider;
             GA.LogStartSession();
         }

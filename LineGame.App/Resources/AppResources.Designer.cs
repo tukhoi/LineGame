@@ -331,7 +331,7 @@ namespace LineGame.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pick background.
+        ///   Looks up a localized string similar to pick background.
         /// </summary>
         public static string PickBackgroundTitle {
             get {
@@ -439,7 +439,7 @@ namespace LineGame.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to updated on 10/28/2014.
+        ///   Looks up a localized string similar to updated on 11/12/2014.
         /// </summary>
         public static string UpdateDateMessage {
             get {

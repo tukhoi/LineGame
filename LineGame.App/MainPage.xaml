@@ -1,4 +1,5 @@
-﻿<this:LinePage
+﻿<this:LinePage 
+    xmlns:AppPromo="clr-namespace:AppPromo;assembly=AppPromo.WP8" 
     x:Class="LineGame.App.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -38,7 +39,7 @@
             </toolkit:NavigationOutTransition.Forward>
         </toolkit:NavigationOutTransition>
     </toolkit:TransitionService.NavigationOutTransition>
-
+    
     <phone:PhoneApplicationPage.Resources>
         <system:Int32 x:Key="Pub">923880017</system:Int32>
         <system:Int32 x:Key="AdSpaceID">65847050</system:Int32>
@@ -50,7 +51,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        
+        <AppPromo:RateReminder />
+        
         <!-- LOCALIZATION NOTE:
             To localize the displayed strings copy their values to appropriately named
             keys in the app's neutral language resource file (AppResources.resx) then
@@ -76,7 +79,7 @@
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="115"/>
                 <RowDefinition Height="*"/>
@@ -131,7 +134,7 @@
                     VerticalAlignment="Top" Canvas.ZIndex="2"/>
 
                 <adduplex:AdControl
-                    Margin="0,0,0,4"
+                    Margin="-16,0,0,0"
                     VerticalAlignment="Bottom"
                     CacheMode="BitmapCache"
                     x:Name="adduplex"
@@ -145,7 +148,7 @@
                     AdInterval="30000"
                     PopupAdDuration="20000"
                     x:Name="smaato"
-                    Margin="0,0,0,4"
+                    Margin="-16,0,0,0"
                     VerticalAlignment="Bottom"
                     Visibility="Collapsed"/>
             </StackPanel>
